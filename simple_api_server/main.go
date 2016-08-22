@@ -64,6 +64,8 @@ func sshkeys(w http.ResponseWriter, r *http.Request) {
 }
 func main() {
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/deploy/", handler)
+	http.HandleFunc("/ssh/", handler)
 	http.HandleFunc("/ssh/keys/", sshkeys)
 	http.ListenAndServe(":8081", nil)
 
