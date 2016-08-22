@@ -7,11 +7,12 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type Message struct {
-	Priv,Pub string
+	Priv, Pub string
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +56,7 @@ func sshkeys(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(pub_pem)
 
 	// Write to browser
-	m := Message{priv_pem,pub_pem}
+	m := Message{priv_pem, pub_pem}
 	b, err := json.Marshal(m)
 	if err != nil {
 		panic(err)
@@ -63,10 +64,12 @@ func sshkeys(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 func main() {
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/deploy/", handler)
-	http.HandleFunc("/ssh/", handler)
-	http.HandleFunc("/ssh/keys/", sshkeys)
-	http.ListenAndServe(":8081", nil)
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", handler).Methods("GET")
+	r.HandleFunc("/deploy/", handler).Methods("GET")
+	r.HandleFunc("/ssh/", handler).Methods("GET")
+	r.HandleFunc("/ssh/keys/", sshkeys).Methods("GET")
+	http.ListenAndServe(":8081", r)
 
 }
