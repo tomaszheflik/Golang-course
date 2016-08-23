@@ -1,0 +1,11 @@
+{
+  "roles": {
+    "jenkins": {
+      "env": {
+        "seedjob_url": "ssh://git@stash.hybris.com:7999/infra/yaas-pipeline-seed-job.git",
+        "ldap_group_id": "5425694cdf15db3bc9000006",
+        "seedjob_groovy_scripts": "jobs/*Job*.groovy"
+      }
+    }
+  }
+}
